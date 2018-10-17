@@ -2,10 +2,14 @@ const directorUl = document.getElementById('directorUl');
 const titleUl = document.getElementById('titleUl');
 const releaseUl = document.getElementById('releaseUl');
 
+const directorH = document.getElementById('directorH');
+const titleH = document.getElementById('releaseH4').addEventListener("click",orderList);
+
+
 
 function recieveJSON() {
   var request = new XMLHttpRequest();
-  request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title&$limit=10", true)
+  request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title&$limit=100", true)
   request.onload = function(){
     if(request.status >= 200 && request.status < 400){
       var rawJson = JSON.parse(this.response);
@@ -43,7 +47,9 @@ function searchFor(){
 }
 
 
-function removeList(rawJson){
+
+
+function removeList(){
   //console.log(rawJson.);
     while (directorUl.firstChild) {
       directorUl.removeChild(directorUl.firstChild);
@@ -52,12 +58,31 @@ function removeList(rawJson){
     }
 }
 
-function JSONtoList(rawJson, removeList){
-    if(Boolean(titleUl.childElementCount > 0) && Boolean(directorUl.childElementCount > 0) && Boolean(releaseUl.childElementCount > 0)){
-      return removeList(rawJson);
+function orderList(){
+
+  var request = new XMLHttpRequest();
+  request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title&$order=director ASC&$limit=5", true)
+  request.onload = function(){
+    if(request.status >= 200 && request.status < 400){
+      var rawJson = JSON.parse(this.response);
+          JSONtoList(rawJson, removeList);
     }
-    else {
+
+  else{
+    console.log("error");
+  }
+}
+  request.send();
+
+
+}
+
+function JSONtoList(rawJson, removeList){
+  removeList();
+  var index = [];
       rawJson.forEach(filmLoc =>{
+        index.push(filmLoc);
+        console.log(index.length);
         li = document.createElement('li');
         //li.textContent = JSON.stringify(filmLoc)
         li.textContent = filmLoc.title;
@@ -72,7 +97,7 @@ function JSONtoList(rawJson, removeList){
         releaseUl.appendChild(li2);
 
       });
-    }
+
 
 
 }
