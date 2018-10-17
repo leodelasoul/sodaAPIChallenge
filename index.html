@@ -22,20 +22,37 @@
   <![endif]-->
 
   <!-- Add your site or application content here -->
-  <div id= "main">
+  <div class="top">
     <button type="submit" onclick="recieveJSON()">recieve</button>
 
-    <input type="text" id="searchField" onkeyup="searchfilter()">
+    <input type="text" id="searchField">
+    <button type="submit" onclick="searchFor()">search</button>
 
-    <ul id="directorUl">
-    </ul>
 
+  </div>
+
+  <div id= "main">
+
+      <div id = "titleHead">
+      <h4>Title</h4>
         <ul id="titleUl">
         </ul>
+      </div>
+      
+      <div id = "directorHead">
+        <h4>Director</h4>
+        <ul id="directorUl">
+        </ul>
+      </div>
 
+
+        <div id = "realeaseHead">
+          <h4>Release Year</h4>
             <ul id="releaseUl">
             </ul>
+        </div>
   </div>
+
   <script src="js/vendor/modernizr-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>

@@ -98,28 +98,22 @@ textarea {
    ========================================================================== */
 
 
-div#main{
-  position: absolute;
-  display: block;
-  width: 100%;
+   #main {
+     display: flex;                  /* establish flex container */
+     flex-direction: row;            /* default value; can be omitted */
+     flex-wrap: nowrap;              /* default value; can be omitted */
+     justify-content: space-between;              /* establish flex container */
+      /* switched from default (flex-start, see below) */
+
+   }
+   #main > div {
+     width: 100%;
+
+   }
+
+h4{
+  right:1%;
 }
-
-
-ul#directorUl{
-  float: right;
-}
-
-ul#releaseUl{
-  float: left;
-}
-ul#titleUl{
-  float: right;
-}
-
-
-
-
-
 
 
 
