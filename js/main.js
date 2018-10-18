@@ -5,11 +5,14 @@ const releaseUl = document.getElementById('releaseUl');
 const directorH = document.getElementById('directorH');
 const titleH = document.getElementById('releaseH4').addEventListener("click",orderList);
 
-
+function MovieObject(title,index) {
+  this.title = title
+  this.index = index;
+}
 
 function recieveJSON() {
   var request = new XMLHttpRequest();
-  request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title&$limit=100", true)
+  request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title", true)
   request.onload = function(){
     if(request.status >= 200 && request.status < 400){
       var rawJson = JSON.parse(this.response);
@@ -35,7 +38,6 @@ function searchFor(){
   request.onload = function(){
     if(request.status >= 200 && request.status < 400){
       var rawJson = JSON.parse(this.response);
-      console.log(rawJson)
       JSONtoList(rawJson,removeList);
 
   }
@@ -61,7 +63,7 @@ function removeList(){
 function orderList(){
 
   var request = new XMLHttpRequest();
-  request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title&$order=director ASC&$limit=5", true)
+  request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title&$order=director ASC&", true)
   request.onload = function(){
     if(request.status >= 200 && request.status < 400){
       var rawJson = JSON.parse(this.response);
@@ -80,23 +82,41 @@ function orderList(){
 function JSONtoList(rawJson, removeList){
   removeList();
   var index = [];
-      rawJson.forEach(filmLoc =>{
-        index.push(filmLoc);
-        console.log(index.length);
-        li = document.createElement('li');
-        //li.textContent = JSON.stringify(filmLoc)
-        li.textContent = filmLoc.title;
-        titleUl.appendChild(li);
+      rawJson.forEach(function (filmLoc, i){
 
-        li1 = document.createElement('li');
+        index.push(filmLoc);
+
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+
+        a.textContent = filmLoc.title;
+        var liU = titleUl.appendChild(li);
+        liU.appendChild(a).setAttribute('href',"detail.html");
+
+        //used jquery as more of a hack
+          $(a).on('click', function(event) {
+            window.location = "detail.html";
+            event.preventDefault();
+
+            localStorage.setItem('title', a.textContent);
+            localStorage.setItem('id', i);
+
+          });
+
+
+
+        var li1 = document.createElement('li');
         li1.textContent = filmLoc.director;
         directorUl.appendChild(li1);
 
-        li2 = document.createElement('li');
+        var li2 = document.createElement('li');
         li2.textContent = filmLoc.release_year;
         releaseUl.appendChild(li2);
 
       });
+
+
+
 
 
 

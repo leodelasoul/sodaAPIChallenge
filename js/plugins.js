@@ -1,24 +1,26 @@
-// Avoid `console` errors in browsers that lack a console.
-(function() {
-  var method;
-  var noop = function () {};
-  var methods = [
-    'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
-    'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
-    'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
-    'timeline', 'timelineEnd', 'timeStamp', 'trace', 'warn'
-  ];
-  var length = methods.length;
-  var console = (window.console = window.console || {});
+const movieTitle = localStorage.getItem("title");
+const movieIndex = localStorage.getItem("id");
+const dataUl = document.getElementById('dataUl');
 
-  while (length--) {
-    method = methods[length];
+console.log(movieIndex + " " + movieTitle);
 
-    // Only stub undefined methods.
-    if (!console[method]) {
-      console[method] = noop;
+
+
+function selectAllFromIndex() {
+  var request = new XMLHttpRequest();
+  request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=*&$limit=1&$offset="+movieIndex, true)
+  request.onload = function(){
+    if(request.status >= 200 && request.status < 400){
+      var rawJson = JSON.parse(this.response);
+      li = document.createElement('li');
+      li.textContent = JSON.stringify(rawJson);
+      dataUl.appendChild(li);
     }
-  }
-}());
 
-// Place any jQuery/helper plugins in here.
+  else{
+    console.log("error");
+  }
+}
+  request.send();
+
+}
