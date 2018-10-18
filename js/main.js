@@ -7,7 +7,7 @@ const titleH = document.getElementById('releaseH4');
 
 var page = 100;
 
-
+//manages pagination of results within 100 steps of entries
 function pageHandler(recieveJSON){
 
   var plusButton = document.getElementById('plus');
@@ -27,6 +27,8 @@ function pageHandler(recieveJSON){
   };
 }
 
+//main query of getting the results for a the desired 3 fields, note: its kind of useless because entries are not unique and getting knowledge out of it is uncertain
+//uses json get request and is then put in lists
 function recieveJSON() {
   pageHandler(recieveJSON)
   var request = new XMLHttpRequest();
@@ -34,7 +36,6 @@ function recieveJSON() {
   request.onload = function(){
     if(request.status >= 200 && request.status < 400){
       var rawJson = JSON.parse(this.response);
-          console.log('hit');
           JSONtoList(rawJson, removeList);
           return rawJson;
     }
@@ -48,13 +49,11 @@ function recieveJSON() {
 }
 
 
-
+//same as above, only that its gets a where statement to the query,taken from the input field
 function searchFor(){
   var searchString = document.getElementById("searchField").value;
   searchString = "'".concat(searchString,"'")
   var request = new XMLHttpRequest();
-
-  //var test = "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title&$where=title="+searchString;
   request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title&$where=title="+searchString, true);
   request.onload = function(){
     if(request.status >= 200 && request.status < 400){
@@ -72,7 +71,7 @@ function searchFor(){
 
 
 
-
+//clearing old queries, more of a intuitional practice
 function removeList(){
     while (directorUl.firstChild) {
       directorUl.removeChild(directorUl.firstChild);
@@ -80,9 +79,8 @@ function removeList(){
       releaseUl.removeChild(releaseUl.firstChild);
     }
 }
-
+//'filtering'?
 function orderList(){
-
   var request = new XMLHttpRequest();
   request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title&$order=director ASC&", true)
   request.onload = function(){
@@ -99,7 +97,7 @@ function orderList(){
 
   //directorH.ondblclick = recieveJSON();
 }
-
+//creates the elements, first: clear data, then create a internal index making entries "unique", build the dom tree with a click event for the movie titles
 function JSONtoList(rawJson, removeList){
   removeList();
   var index = [];
