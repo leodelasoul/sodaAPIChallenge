@@ -1,5 +1,4 @@
 ### TODOs
--add filtering and search functionality
--full select for a entry on a new site
--pagination
--nice look and feel
+-add filtering and search functionality -done, filtering only for ascending directors
+-full select for a entry on a new site -done, but raw json data, also for searched data only functionaly on button submit, filtering not considered
+-pagination - done

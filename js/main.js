@@ -2,21 +2,41 @@ const directorUl = document.getElementById('directorUl');
 const titleUl = document.getElementById('titleUl');
 const releaseUl = document.getElementById('releaseUl');
 
-const directorH = document.getElementById('directorH');
-const titleH = document.getElementById('releaseH4').addEventListener("click",orderList);
+const directorH = document.getElementById('directorH4').addEventListener("click",orderList);
+const titleH = document.getElementById('releaseH4');
 
-function MovieObject(title,index) {
-  this.title = title
-  this.index = index;
+var page = 100;
+
+
+function pageHandler(recieveJSON){
+
+  var plusButton = document.getElementById('plus');
+  var minusButton = document.getElementById('minus');
+
+  minusButton.onclick = function(){
+    if(page > 100){
+    page = page - 100;
+    recieveJSON(page)
+    }
+  };
+    plusButton.onclick = function(){
+      if(page < 1700){
+      page = page + 100;
+      recieveJSON(page)
+    }
+  };
 }
 
 function recieveJSON() {
+  pageHandler(recieveJSON)
   var request = new XMLHttpRequest();
-  request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title", true)
+  request.open('GET', "https://data.sfgov.org/resource/wwmu-gmzc.json?$select=director,release_year,title&$limit="+page, true)
   request.onload = function(){
     if(request.status >= 200 && request.status < 400){
       var rawJson = JSON.parse(this.response);
+          console.log('hit');
           JSONtoList(rawJson, removeList);
+          return rawJson;
     }
 
   else{
@@ -26,6 +46,7 @@ function recieveJSON() {
   request.send();
 
 }
+
 
 
 function searchFor(){
@@ -40,6 +61,7 @@ function searchFor(){
       var rawJson = JSON.parse(this.response);
       JSONtoList(rawJson,removeList);
 
+
   }
   else{
     console.log("error");
@@ -52,7 +74,6 @@ function searchFor(){
 
 
 function removeList(){
-  //console.log(rawJson.);
     while (directorUl.firstChild) {
       directorUl.removeChild(directorUl.firstChild);
       titleUl.removeChild(titleUl.firstChild);
@@ -76,7 +97,7 @@ function orderList(){
 }
   request.send();
 
-
+  //directorH.ondblclick = recieveJSON();
 }
 
 function JSONtoList(rawJson, removeList){
@@ -114,10 +135,6 @@ function JSONtoList(rawJson, removeList){
         releaseUl.appendChild(li2);
 
       });
-
-
-
-
-
-
 }
+
+window.onload = recieveJSON();
